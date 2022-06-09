@@ -35,6 +35,7 @@ app.get("/", (req, res) => {
   res.send("Hello first request");
 });
 
+app.use(express.json());
 // Middlewares
 app.use("/api/auth",authRouter);
 app.use("/api/hotels", hotelsRouter);
