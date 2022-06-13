@@ -1,72 +1,22 @@
 import express from "express";
 import Hotel from "../models/hotels.js";
+import { createHotel, deleteHotel, getHotel, getHotels, updateHotel } from "../controllers/hotels.js";
+import { createError } from "../utils/error.js";
 
 const hotelsRouter = express.Router();
 
 // Create
-hotelsRouter.post("/", async (req, res) => {
-  const newHotel = new Hotel(req.body);
-  try {
-    const savedHotel = await newHotel.save();
-    // This part gives the response. If wala ni walay return value sa insomnia
-    res.status(200).json(newHotel);
-  } catch (err) {
-    res.status(500).json(err);
-    console.error(err);
-  }
-});
+hotelsRouter.post("/", createHotel);
 
 // Update
-hotelsRouter.put("/:id", async (req, res) => {
-  try {
-    const updatedHotel = await Hotel.findByIdAndUpdate(
-      req.params.id,
-      {
-        $set: req.body,
-      },
-      { new: true }
-    );
-    // This part gives the response. If wala ni walay return value sa insomnia
-    res.status(200).json(updatedHotel);
-  } catch (err) {
-    res.status(500).json(err);
-    console.error(err);
-  }
-});
+hotelsRouter.put("/:id", updateHotel);
 
 // Delete
-hotelsRouter.delete("/:id", async (req, res) => {
-  try {
-    const deletedHotel = await Hotel.findByIdAndDelete(req.params.id);
-    // This part gives the response. If wala ni walay return value sa insomnia
-    res.status(200).json(deletedHotel);
-  } catch (err) {
-    res.status(500).json(deletedHotel);
-    console.error(err);
-  }
-});
+hotelsRouter.delete("/:id",deleteHotel);
 
 // Get one
-hotelsRouter.get("/:id", async (req, res) => {
-  try {
-    const hotel = await Hotel.findById(req.params.id);
-    // This part gives the response. If wala ni walay return value sa insomnia
-    res.status(200).json(hotel);
-  } catch (err) {
-    res.status(500).json(hotel);
-    console.error(err);
-  }
-});
+hotelsRouter.get("/:id", getHotel);
 
 //Get all
-hotelsRouter.get("/", async (req, res) => {
-  try {
-    const hotels = await Hotel.find();
-    // This part gives the response. If wala ni walay return value sa insomnia
-    res.status(200).json(hotels);
-  } catch (err) {
-    res.status(500).json(hotels);
-    console.error(err);
-  }
-});
+hotelsRouter.get("/",getHotels );
 export default hotelsRouter;
