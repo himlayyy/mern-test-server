@@ -35,12 +35,25 @@ app.get("/", (req, res) => {
   res.send("Hello first request");
 });
 
-app.use(express.json());
 // Middlewares
-app.use("/api/auth",authRouter);
+app.use(express.json());
+
+app.use("/api/auth", authRouter);
 app.use("/api/hotels", hotelsRouter);
 app.use("/api/rooms", roomsRouter);
 app.use("/api/users", usersRouter);
+
+// error handler
+app.use((err, req, res, next) => {
+  const errorStatus = err.status || 500;
+  const errorMessage = err.message || "Something went wrong";
+  return res.status(500).json({
+    success: false,
+    status: errorStatus,
+    message: errorMessage,
+    stack: err.stack,
+  });
+});
 
 // Starts server
 app.listen(8000, () => {
