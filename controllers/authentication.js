@@ -32,7 +32,7 @@ export const login = async (req, res, next) => {
       if (!result) return next(createError(404, "Wrong password or username"));
     });
 
-    res.status(200).json({ message: "logged in!", user });
+    res.status(200).json(user);
   } catch (err) {
     next(err);
   }
