@@ -43,7 +43,7 @@ export const login = async (req, res, next) => {
 
     res
     // sends a cookie
-      .cookie("access-token", token, {
+      .cookie("access_token", token, {
         // doesnt allow any client secret to reach the cookie
         httpOnly: true,
       })
