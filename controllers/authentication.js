@@ -33,9 +33,22 @@ export const login = async (req, res, next) => {
       if (!result) return next(createError(404, "Wrong password or username"));
     });
 
-    const {passwordHash, isAdmin, ...otherDetails} = user._doc; 
+    // JWT hashes this
+    const token = jwt.sign(
+      { id: user._id, isAdmin: user.isAdmin },
+      process.env.JWT
+    );
 
-    res.status(200).json(otherDetails);
+    const { passwordHash, isAdmin, ...otherDetails } = user._doc;
+
+    res
+    // sends a cookie
+      .cookie("access-token", token, {
+        // doesnt allow any client secret to reach the cookie
+        httpOnly: true,
+      })
+      .status(200)
+      .json(otherDetails);
   } catch (err) {
     next(err);
   }
