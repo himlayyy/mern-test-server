@@ -2,6 +2,7 @@
 import bcrypt from "bcrypt";
 import { createError } from "../utils/error.js";
 import User from "../models/users.js";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res, next) => {
   try {
@@ -26,13 +27,15 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.body.username });
-    const passwordHash = user.passwordHash;
+    const hash = user.passwordHash;
     const plainTextPassword = req.body.password;
-    bcrypt.compare(plainTextPassword, passwordHash, function (err, result) {
+    bcrypt.compare(plainTextPassword, hash, function (err, result) {
       if (!result) return next(createError(404, "Wrong password or username"));
     });
 
-    res.status(200).json(user);
+    const {passwordHash, isAdmin, ...otherDetails} = user._doc; 
+
+    res.status(200).json(otherDetails);
   } catch (err) {
     next(err);
   }
