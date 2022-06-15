@@ -8,6 +8,7 @@ import {
   updateHotel,
 } from "../controllers/hotels.js";
 import { verifyAdmin } from "../utils/verifyToken.js";
+import hotels from "../models/hotels.js";
 
 const hotelsRouter = express.Router();
 
@@ -25,4 +26,6 @@ hotelsRouter.get("/:id", getHotel);
 
 //Get all
 hotelsRouter.get("/", getHotels);
+
+
 export default hotelsRouter;
